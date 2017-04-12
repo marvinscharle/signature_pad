@@ -25,6 +25,11 @@ function SignaturePad(canvas, options) {
   this.onBegin = opts.onBegin;
   this.onEnd = opts.onEnd;
 
+  /**
+   * Factor to scale user input. Can be used if the canvas element is resized via CSS.
+   */
+  this.scaleFactor = 1;
+
   this._canvas = canvas;
   this._ctx = canvas.getContext('2d');
   this.clear();
@@ -291,9 +296,11 @@ SignaturePad.prototype._strokeWidth = function (velocity) {
 
 SignaturePad.prototype._drawPoint = function (x, y, size) {
   const ctx = this._ctx;
-
-  ctx.moveTo(x, y);
-  ctx.arc(x, y, size, 0, 2 * Math.PI, false);
+  const scaledX = x * this.scaleFactor;
+  const scaledY = y * this.scaleFactor;
+  const scaledSize = size * this.scaleFactor;
+  ctx.moveTo(scaledX, scaledY);
+  ctx.arc(scaledX, scaledY, scaledSize, 0, 2 * Math.PI, false);
   this._isEmpty = false;
 };
 
